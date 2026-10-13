@@ -22,7 +22,7 @@ const focusAreas = [
     offset: false,
   },
   {
-    icon: "fa-solid fa-chart-line",
+    icon: "fa-solid fa-line-chart",
     title: "Economics",
     body: "Economic systems, markets, behavior, and quantitative approaches to social questions.",
     offset: true,
@@ -65,7 +65,7 @@ export default function Home() {
 
         <div className="container mx-auto px-6 relative z-20 h-full flex items-end pb-16 md:pb-24">
           <div className="max-w-4xl w-full animate-fade-in-up">
-            <span className="academic-caps text-blue-400 mb-4 md:mb-6 block text-[10px]">
+            <span className="academic-caps text-blue-400 mb-4 md:mb-6 block text-[10px] max-lg:text-[11px]">
               <i className="fa-solid fa-microscope mr-2" />
               Scientific Inquiry • Kathmandu
             </span>
@@ -107,22 +107,18 @@ export default function Home() {
       {/* ABOUT NSSR — Stanford/MIT Asymmetrical Split */}
       <section className="about-section" aria-labelledby="about-heading">
         <div
-          className="container mx-auto px-6"
-          style={{ maxWidth: 1200, padding: "120px 24px" }}
+          className="container mx-auto px-6 py-16 lg:py-[120px]"
+          style={{ maxWidth: 1200 }}
         >
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1.5fr",
-              gap: 80,
-              alignItems: "start",
-            }}
-          >
+          {/* 1fr 1.5fr at 80px above lg; below it the columns stack so neither
+              the headline nor the lede is squeezed into a phone-wide track. */}
+          <div className="grid grid-cols-1 gap-10 lg:grid-cols-[1fr_1.5fr] lg:gap-20 items-start">
             {/* Left Column: Introduction */}
             <div>
               <span className="eyebrow-blue">ABOUT NSSR</span>
               <h2 id="about-heading" className="heading-2xl">
-                Advancing student-led <br />
+                Advancing student-led{" "}
+                <br className="hidden lg:inline" />
                 research in Nepal.
               </h2>
             </div>
@@ -141,13 +137,7 @@ export default function Home() {
               </p>
 
               {/* Mission & Vision Sub-grid */}
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "1fr 1fr",
-                  gap: 48,
-                }}
-              >
+              <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-12">
                 <article className="border-t-2 border-nssrDark pt-6">
                   <h3 className="mission-vision-title">Our Mission</h3>
                   <p>
@@ -505,7 +495,7 @@ evidence-based solutions for the country&rsquo;s most
                   <img key={src} src={src} alt="Partner" loading="lazy" />
                 ))}
               </div>
-              <p className="text-center text-[8px] uppercase font-bold text-slate-400 mt-12 tracking-[0.4em]">
+              <p className="text-center text-[8px] max-lg:text-[11px] uppercase font-bold text-slate-400 mt-12 tracking-[0.4em]">
                 Official Partners • 2025-2026
               </p>
             </div>

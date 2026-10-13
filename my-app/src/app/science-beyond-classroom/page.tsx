@@ -219,7 +219,7 @@ export default function ScienceBeyondClassroomPage() {
                       >
                         {stat.value}
                       </div>
-                      <p className="text-[10px] uppercase tracking-widest text-slate-500 mt-2">
+                      <p className="text-[10px] max-lg:text-[11px] uppercase tracking-widest text-slate-500 mt-2">
                         {stat.label}
                       </p>
                     </div>
@@ -323,7 +323,7 @@ export default function ScienceBeyondClassroomPage() {
                       <b className={`font-oswald text-xl ${slot.color}`}>
                         {slot.mins}
                       </b>
-                      <p className="text-[10px] uppercase mt-2 text-slate-600">
+                      <p className="text-[10px] max-lg:text-[11px] uppercase mt-2 text-slate-600">
                         {slot.label}
                       </p>
                     </div>

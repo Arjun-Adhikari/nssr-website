@@ -1,0 +1,19 @@
+# Git LFS — the site's photography and proceedings PDFs.
+#
+# my-app/public holds ~360 MB of images; as ordinary git blobs that dominates
+# .git, makes clones slow, and will eventually hit GitHub's repository limits.
+# Tracking them as LFS keeps pointer files in history and the payloads in LFS
+# storage. The 5 SVGs are the small create-next-app defaults, so they stay in
+# normal git.
+public/**/*.jpg filter=lfs diff=lfs merge=lfs -text
+public/**/*.jpeg filter=lfs diff=lfs merge=lfs -text
+public/**/*.png filter=lfs diff=lfs merge=lfs -text
+public/**/*.webp filter=lfs diff=lfs merge=lfs -text
+public/**/*.pdf filter=lfs diff=lfs merge=lfs -text
+
+# Same extensions, in case assets are added outside public/ later.
+*.jpg filter=lfs diff=lfs merge=lfs -text
+*.jpeg filter=lfs diff=lfs merge=lfs -text
+*.png filter=lfs diff=lfs merge=lfs -text
+*.webp filter=lfs diff=lfs merge=lfs -text
+*.pdf filter=lfs diff=lfs merge=lfs -text

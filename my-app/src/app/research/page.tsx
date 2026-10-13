@@ -85,14 +85,14 @@ export default function ResearchPage() {
         </div>
       </header>
 
-      {/* RESEARCH SPOTLIGHT — Sticky Scroll Creative Section */}
+      {/* RESEARCH SPOTLIGHT — centred header over a two-column grid */}
       <section className="research-spotlight" aria-labelledby="spotlight-heading">
         <div className="spotlight-grid">
-          {/* Left Column: Sticky Heading */}
-          <div className="spotlight-sticky">
+          {/* Centred section header */}
+          <div className="spotlight-header">
             <span className="spotlight-eyebrow">Research Spotlight</span>
             <h2 id="spotlight-heading" className="spotlight-heading">
-              Where curiosity meets <br />
+              Where curiosity meets{" "}
               <span className="spotlight-accent">rigorous inquiry.</span>
             </h2>
             <p className="spotlight-lead">
@@ -101,7 +101,7 @@ export default function ResearchPage() {
             </p>
           </div>
 
-          {/* Right Column: Scrolling Feature Blocks */}
+          {/* Two-column grid of feature blocks */}
           <div className="spotlight-content">
             {spotlights.map((item) => (
               <article className="spotlight-block" key={item.title}>
@@ -113,7 +113,7 @@ export default function ResearchPage() {
                   <span className="spotlight-block__tag">{item.tag}</span>
                   <h3 className="spotlight-block__title">{item.title}</h3>
                   <p className="spotlight-block__excerpt">{item.excerpt}</p>
-                  <a href="#" className="spotlight-block__link">
+                  <a href="#" className="spotlight-block__link max-lg:min-h-11 max-lg:inline-flex max-lg:items-center">
                     <span>{item.cta}</span>
                   </a>
                 </div>

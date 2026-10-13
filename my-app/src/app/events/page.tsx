@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { EventsArchive } from "@/components/events/events-archive";
+import { EventsArchive, FeaturedEvent } from "@/components/events/events-archive";
 
 export const metadata: Metadata = {
   title: "Events Directory",
@@ -40,7 +40,8 @@ export default function EventsPage() {
         </div>
       </header>
 
-      <EventsArchive />
+      {/* event.html orders these Featured -> Partners -> Archive. */}
+      <FeaturedEvent />
 
       {/* PARTNER / SPONSOR LOGOS - Horizontal Flexbox Grid */}
       <section
@@ -79,6 +80,8 @@ export default function EventsPage() {
           </p>
         </div>
       </section>
+
+      <EventsArchive />
     </>
   );
 }

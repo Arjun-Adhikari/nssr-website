@@ -24,22 +24,22 @@ const supports = [
     body: "Experiments across Physics, Chemistry, and Biology, plus STEM career awareness.",
   },
   {
-    icon: "fa-solid fa-video",
+    icon: "fa-solid fa-video-camera",
     title: "Digital learning",
     body: "Projectors, connectivity, and a shared learning library for ordinary lessons.",
   },
   {
-    icon: "fa-solid fa-people-arrows",
+    icon: "fa-solid fa-people-arrows-left-right",
     title: "Near-peer mentorship",
     body: "Monthly concept clinics led by NSSR student researchers and advisors.",
   },
   {
-    icon: "fa-solid fa-photo-film",
+    icon: "fa-solid fa-photo-video",
     title: "Content library",
     body: "Syllabus-aligned videos organized by topic for teachers and students.",
   },
   {
-    icon: "fa-solid fa-book-open-reader",
+    icon: "fa-solid fa-book-reader",
     title: "Reference library",
     body: "Guide books, model questions, past papers, and entrance preparation materials.",
   },

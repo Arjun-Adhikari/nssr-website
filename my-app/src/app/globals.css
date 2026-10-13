@@ -1,5 +1,6 @@
 @layer theme, base, components, utilities;
 @import "tailwindcss";
+@import "@fortawesome/fontawesome-free/css/all.min.css";
 
 /* ==========================================================================
    NSSR design tokens bridged into Tailwind v4's theme layer.
@@ -80,7 +81,7 @@
 
 @layer components {
 /* ==========================================================================
-   NSSR Design System â€” main.css
+   NSSR Design System — main.css
    ---------------------------------------------------------------------------
    The single stylesheet for the whole site. Every page loads exactly this one
    file:
@@ -90,15 +91,15 @@
    It is deliberately a single, self-contained file with no @import rules.
    Browsers apply the same cross-origin policy to @import as to fetch(), so a
    stylesheet that imports its own partials is blocked when the page is opened
-   straight from disk (file://) â€” the site would lose its entire design system.
+   straight from disk (file://) — the site would lose its entire design system.
    Flattening the cascade here is what makes file:// work.
 
    Section order matters:
-     1. Design tokens        â€” colour, type, spacing, radius, shadow, motion
-     2. Base                 â€” reset, global typography, focus, print
-     3. Layout               â€” containers, section rhythm, grids
-     4. Components           â€” header, nav, buttons, cards, badges, footer
-     5. Page styles          â€” per-page refinements, appended at the bottom
+     1. Design tokens        — colour, type, spacing, radius, shadow, motion
+     2. Base                 — reset, global typography, focus, print
+     3. Layout               — containers, section rhythm, grids
+     4. Components           — header, nav, buttons, cards, badges, footer
+     5. Page styles          — per-page refinements, appended at the bottom
 
    Design principles: Apple Human Interface Guidelines (hierarchy, depth,
    translucent vibrancy, high-contrast legibility) and the Meta Design System
@@ -205,7 +206,7 @@
 
   /* --- Spacing: 8px spatial grid ---------------------------------------- */
   --space-0: 0;
-  --space-1: 0.25rem;   /* 4px  â€” hairline nudges only */
+  --space-1: 0.25rem;   /* 4px  — hairline nudges only */
   --space-2: 0.5rem;    /* 8px  */
   --space-3: 0.75rem;   /* 12px */
   --space-4: 1rem;      /* 16px */
@@ -289,14 +290,16 @@
 
 
 /* ==========================================================================
-   2. BASE â€” reset, global typography, shared defaults
+   2. BASE — reset, global typography, shared defaults
    --------------------------------------------------------------------------
-   NOTE ON SPECIFICITY: the Tailwind Play CDN injects its preflight at runtime,
-   which lands *after* this stylesheet in the cascade. Preflight resets headings
-   to `font-size: inherit` with element-level specificity, so base typography is
-   declared one step higher (`html body`, `body h1`, ...) to survive it. Tailwind
+   NOTE ON SPECIFICITY: Tailwind's preflight resets headings to
+   `font-size: inherit` at element specificity, so base typography is declared
+   one step higher (`html body`, `body h1`, ...) to survive it. Tailwind
    utilities are class-level and still win, so existing utility classes on page
    content keep working exactly as before.
+
+   These rules now live in `@layer components`, below Tailwind's `utilities`
+   layer, so a utility always beats them regardless of specificity.
    ========================================================================== */
 
 *,
@@ -364,7 +367,7 @@ body h1, body h2, body h3, body h4, body h5, body h6 {
      A declaration on the element itself always beats inheritance, so pinning
      the heading colour here silently overrode the `text-white` that every dark
      hero puts on its wrapper. The result was near-black #1d1d1f headings on a
-     #0f172a background â€” nine of them across eight pages, all effectively
+     #0f172a background — nine of them across eight pages, all effectively
      invisible while the accent `<span>` inside stayed bright sky-blue and made
      it look like only part of the line had rendered.
 
@@ -543,8 +546,8 @@ hr {
 /* --- Heading colour on dark surfaces ---------------------------------------
    Belt to the braces described above. `html body <dark-surface> h1` is
    (0,2,3), which outranks both `body h1` and every single-class Tailwind
-   colour utility, and `!important` also outranks the Tailwind Play CDN's
-   runtime-injected preflight. The dark surfaces listed are the ones this site
+   colour utility. Author `!important` also outranks Tailwind's
+   base layer. The dark surfaces listed are the ones this site
    actually uses; the selector is a list so adding another is a one-word change. */
 html body :is(.bg-slate-900, .bg-slate-950, .bg-slate-800, .bg-nssrDark, .bg-nssrDark2) :is(h1, h2, h3) {
   color: #ffffff !important;
@@ -564,7 +567,7 @@ html body :is(.bg-slate-900, .bg-slate-950, .bg-slate-800, .bg-nssrDark, .bg-nss
 
 
 /* ==========================================================================
-   3. LAYOUT â€” containers, section rhythm, grids
+   3. LAYOUT — containers, section rhythm, grids
    ========================================================================== */
 
 .container {
@@ -628,7 +631,7 @@ body.nav-open { overflow: hidden; }
    ========================================================================== */
 
 /* ==========================================================================
-   Header â€” sticky, translucent, Apple-style vibrancy
+   Header — sticky, translucent, Apple-style vibrancy
    ========================================================================== */
 .site-header {
   position: sticky;
@@ -776,116 +779,8 @@ body.nav-open { overflow: hidden; }
 .nav-cta.is-active::after { display: none; }
 
 /* --- Dropdowns ------------------------------------------------------------- */
-.nav-dropdown-item { position: relative; }
-
-.dropdown-trigger-wrapper {
-  display: flex;
-  align-items: center;
-}
-
-.dropdown-arrow-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 22px;
-  height: 22px;
-  margin-left: -2px;
-  color: var(--text-tertiary);
-  background: none;
-  border: 0;
-  border-radius: var(--nssr-radius-circle);
-  transition: color var(--transition-premium), background-color var(--transition-premium);
-}
-
-.dropdown-arrow-btn:hover {
-  color: var(--nssr-blue);
-  background: var(--accent-subtle-bg);
-}
-
-.dropdown-caret {
-  width: 6px;
-  height: 6px;
-  border-right: 1.5px solid currentColor;
-  border-bottom: 1.5px solid currentColor;
-  transform: translateY(-2px) rotate(45deg);
-  transition: transform var(--transition-premium);
-}
-
-.nav-dropdown-item.is-open .dropdown-caret { transform: translateY(1px) rotate(225deg); }
-.nav-dropdown-item.is-open .dropdown-arrow-btn { color: var(--nssr-blue); }
-
-.nav-dropdown-menu {
-  position: absolute;
-  top: calc(100% + var(--space-2));
-  left: 0;
-  z-index: var(--z-drawer);
-  min-width: 250px;
-  margin: 0;
-  padding: var(--space-2);
-  list-style: none;
-  background: var(--bg-glass-strong);
-  -webkit-backdrop-filter: saturate(var(--blur-saturation)) blur(var(--blur-overlay));
-  backdrop-filter: saturate(var(--blur-saturation)) blur(var(--blur-overlay));
-  border: 1px solid var(--border-hairline);
-  border-radius: var(--nssr-radius-md);
-  box-shadow: var(--nssr-shadow-lg);
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(8px);
-  transition: opacity var(--transition-premium), transform var(--transition-premium),
-    visibility var(--transition-premium);
-}
-
-/* Desktop: hover + keyboard focus open the menu. */
-@media (min-width: 1025px) {
-  .nav-dropdown-item:hover .nav-dropdown-menu,
-  .nav-dropdown-item:focus-within .nav-dropdown-menu,
-  .nav-dropdown-item.is-open .nav-dropdown-menu {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-  }
-}
-
-/* Mobile: explicit toggle only, so hover does not trap the drawer open. */
-@media (max-width: 1024px) {
-  .nav-dropdown-menu {
-    position: static;
-    min-width: 0;
-    display: none;
-    margin-top: var(--space-2);
-    background: var(--bg-surface-sunken);
-    border: 1px solid var(--border-hairline);
-    box-shadow: none;
-    opacity: 1;
-    transform: none;
-  }
-
-  .nav-dropdown-item.is-open .nav-dropdown-menu { display: block; }
-}
-
-.dropdown-link {
-  display: flex;
-  align-items: center;
-  padding: var(--space-3) var(--space-4);
-  font-size: var(--font-size-md);
-  font-weight: var(--nssr-font-weight-medium);
-  text-decoration: none;
-  color: var(--text-secondary);
-  border-radius: var(--nssr-radius-sm);
-  transition: background-color var(--transition-premium), color var(--transition-premium);
-}
-
-.dropdown-link:hover {
-  color: var(--nssr-blue);
-  background: var(--accent-subtle-bg);
-}
-
-.dropdown-link.is-active {
-  color: var(--nssr-blue);
-  font-weight: var(--nssr-font-weight-semibold);
-  background: var(--accent-subtle-bg);
-}
+/* Nav dropdown styling lives in src/components/site-header.tsx as Tailwind
+   utilities, so the header owns its own presentation. */
 
 /* --- Hamburger ------------------------------------------------------------- */
 .nav-toggle {
@@ -991,46 +886,6 @@ body.nav-open { overflow: hidden; }
 
   .nav-link.is-active::after { display: none; }
 
-  .dropdown-trigger-wrapper {
-    width: 100% !important;
-    max-width: 100% !important;
-    display: flex !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-    box-sizing: border-box !important;
-  }
-
-  .nav-dropdown-item .nav-link {
-    flex: 1 1 auto;
-    border-bottom: 1px solid var(--border-hairline);
-    width: 100% !important;
-    max-width: 100% !important;
-    box-sizing: border-box !important;
-  }
-
-  .dropdown-arrow-btn {
-    width: 48px;
-    height: 48px;
-    margin: 0;
-    flex-shrink: 0;
-  }
-
-  .dropdown-link {
-    font-size: var(--font-size-base);
-    padding: 12px 16px 12px 24px;
-    color: var(--text-secondary) !important;
-    border-radius: var(--nssr-radius-sm);
-    width: 100% !important;
-    max-width: 100% !important;
-    box-sizing: border-box !important;
-  }
-
-  .dropdown-link:hover,
-  .dropdown-link.is-active {
-    background: var(--accent-subtle-bg);
-    color: var(--nssr-blue) !important;
-  }
-
   .nav-cta {
     justify-content: center !important;
     width: 100% !important;
@@ -1048,57 +903,7 @@ body.nav-open { overflow: hidden; }
     box-sizing: border-box !important;
   }
 
-  /* Mobile dropdown accordion */
-  .nav-dropdown-menu {
-    position: static !important;
-    min-width: 0 !important;
-    display: none !important;
-    margin-top: 5px !important;
-    background: #f8fafc !important;
-    border: none !important;
-    border-radius: var(--nssr-radius-md) !important;
-    box-shadow: none !important;
-    padding: 10px 0 !important;
-    opacity: 1 !important;
-    /* The base rule leaves this `visibility: hidden`; without re-enabling it the
-       accordion opens (display: block) but every link inside stays invisible. */
-    visibility: visible !important;
-    transform: none !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    box-sizing: border-box !important;
   }
-
-  .nav-dropdown-item.is-open .nav-dropdown-menu {
-    display: block !important;
-  }
-
-  .nav-dropdown-menu .dropdown-link,
-  .nav-dropdown-menu li a {
-    display: block !important;
-    padding: 12px 24px !important;
-    font-family: var(--font-sans, sans-serif) !important;
-    font-size: 0.95rem !important;
-    font-weight: 500 !important;
-    color: #0f172a !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-    white-space: normal !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    box-sizing: border-box !important;
-  }
-
-  .nav-dropdown-menu .dropdown-link:hover,
-  .nav-dropdown-menu .dropdown-link:active {
-    background-color: transparent !important;
-    color: #1d4ed8 !important;
-  }
-
-  .nav-dropdown-item.is-open .dropdown-caret {
-    transform: translateY(1px) rotate(225deg) !important;
-  }
-}
 
 @media (max-width: 480px) {
   .nav-brand-logo { width: 28px; height: 28px; }
@@ -1117,12 +922,6 @@ body.nav-open { overflow: hidden; }
     font-size: var(--font-size-sm);
   }
 
-  .dropdown-link {
-    padding: 10px 14px 10px 20px;
-    font-size: var(--font-size-sm);
-    color: var(--text-secondary) !important;
-  }
-
   .nav-cta {
     padding: 14px 20px;
     font-size: var(--font-size-sm);
@@ -1131,7 +930,7 @@ body.nav-open { overflow: hidden; }
 
 
 /* ==========================================================================
-   5. PREMIUM COMPONENTS â€” Zero-Box Policy
+   5. PREMIUM COMPONENTS — Zero-Box Policy
    ========================================================================== */
 
 /* --- Buttons: Solid blue, sharp 4px radius, premium transition --- */
@@ -1398,7 +1197,7 @@ a:hover img,
 }
 
 /* Blue team/collaboration pictogram, #2563eb, matching the .text-blue-600 icons
-   it sits beside. Three figures â€” two behind, one in front. */
+   it sits beside. Three figures — two behind, one in front. */
 .icon-team { color: #2563eb; }
 
 /* Hidden definition host for the <symbol> sprite. */
@@ -1485,7 +1284,7 @@ a:hover img,
 
 
 /* ==========================================================================
-   FOOTER â€” Split Curved Layout
+   FOOTER — Split Curved Layout
    ========================================================================== */
 
 .site-footer {
@@ -2212,7 +2011,7 @@ a:hover img,
 
 
 /* ==========================================================================
-   6. BLUE-SURFACE LINK LOCK  â€”  MUST REMAIN THE LAST BLOCK IN THIS FILE
+   6. BLUE-SURFACE LINK LOCK  —  MUST REMAIN THE LAST BLOCK IN THIS FILE
    --------------------------------------------------------------------------
    THE BUG THIS FIXES
    --------------------
@@ -2224,7 +2023,7 @@ a:hover img,
    Specificity is compared as (inline, CLASS, TYPE) and the first non-zero
    column decides. `html body a` has zero classes and three type selectors, so
    it beats every single-class rule a stylesheet or utility framework can
-   write â€” including Tailwind's `.text-white` (0,1,0) and our own
+   write — including Tailwind's `.text-white` (0,1,0) and our own
    `.nav-cta { color: white }` (0,1,0).
 
    Consequence: every link rendered on a blue surface had its label repainted
@@ -2238,11 +2037,11 @@ a:hover img,
    -------
    Two belts, no braces:
 
-     1. Specificity â€” every selector below is `html body <tag>.<class>`, giving
+     1. Specificity — every selector below is `html body <tag>.<class>`, giving
         at least (0,1,3) and therefore a strict win over `html body a`.
-     2. `!important` â€” an author `!important` declaration outranks the Tailwind
-        Play CDN's preflight and utilities regardless of specificity, so the
-        white label cannot be lost even if the CDN reorders its injection.
+2. `!important` — an author `!important` declaration outranks every
+         Tailwind layer regardless of specificity, so the white label cannot be
+         lost if utilities are reordered.
 
    The blue surface is matched by class so this stays a targeted rule rather
    than a blanket `a { color: white }`, which would wreck every ordinary text
@@ -2497,7 +2296,7 @@ html body button.btn-hero-outline:active {
 
    `.hero-clear` reserves the header height plus a full breathing band above the
    first line of hero content. The band is 76px, which puts the total at 140px
-   on a 64px desktop header â€” comfortably more than the 64px the header
+   on a 64px desktop header — comfortably more than the 64px the header
    occupies. The `80px` fallback matters: if this file is ever loaded without
    the token layer the hero still clears a generously sized header rather than
    collapsing to zero.
@@ -2586,8 +2385,8 @@ html body button.btn-hero-outline:active {
    centred content block measures ~442px (eyebrow, h1, paragraph, two CTAs) at
    the widest breakpoint, and a vertically centred child of height C inside a
    hero of height H sits (H - C) / 2 below the top edge. Reserving 600px
-   therefore guarantees ~79px above the first line â€” more than the 64px the
-   header occupies â€” at ANY viewport height, including the short ones where
+   therefore guarantees ~79px above the first line — more than the 64px the
+   header occupies — at ANY viewport height, including the short ones where
    `h-screen` collapses and this minimum is what actually applies.
 
    Stating the number here (rather than leaving it to `min-h-[600px]` in the
@@ -2599,7 +2398,7 @@ html body button.btn-hero-outline:active {
 
 
 /* ==========================================================================
-    9. BUTTON FIXES â€” pseudo-element z-index guards
+    9. BUTTON FIXES — pseudo-element z-index guards
     ========================================================================== */
 .btn-primary,
 .cta-btn,
@@ -3002,6 +2801,12 @@ a.btn-blue > *,
   border: 1px solid var(--border-hairline);
 }
 
+/* --font-size-2xs lands at 10.4px, which is below the comfortable floor for a
+   short status label on a phone. Lifted a touch on small screens only. */
+@media (max-width: 639.98px) {
+  .status-pill { font-size: 11px; }
+}
+
 /* --- Featured / upcoming split card (Zero-Box) --------------------------------- */
 .event-featured {
   display: flex;
@@ -3184,7 +2989,7 @@ a.btn-blue > *,
 
 
 /* ==========================================================================
-   10. INSTITUTIONAL FRAMEWORK â€” editorial values grid (index.html)
+   10. INSTITUTIONAL FRAMEWORK — editorial values grid (index.html)
    ========================================================================== */
 .framework-grid {
   display: grid;
@@ -3225,7 +3030,7 @@ a.btn-blue > *,
   background: rgba(37, 99, 235, 0.4);
 }
 
-/* Serif display over a sans body â€” the contrast the section is built around. */
+/* Serif display over a sans body — the contrast the section is built around. */
 .framework-aside__title {
   font-family: var(--font-serif-brand);
   font-size: clamp(2rem, 4.2vw, 3rem);
@@ -3396,7 +3201,7 @@ a.btn-blue > *,
    12. UNIVERSAL BLUE BUTTON TEXT FIX
    ---------------------------------------------------------------------------
    Ensures ALL solid-blue buttons and forms.gle CTA links keep #ffffff text
-   in default, :hover, :focus, :active states â€” even when using arbitrary
+   in default, :hover, :focus, :active states — even when using arbitrary
    Tailwind utilities (bg-blue-*, hover:bg-blue-*) that don't match the
    .btn-primary / [class~="bg-blue-*"] selectors above.
    ========================================================================== */
@@ -3599,33 +3404,40 @@ html, body { overflow-x: hidden; width: 100%; }
   .event-featured__media { min-height: 240px; }
 }
 
-/* --- team.html: Sidebar tabs -> horizontal scroll on mobile --- */
+/* --- team.html: Sidebar tabs -> stacked list on mobile ---
+   These were a horizontal scroller, but the buttons are block-level with
+   width:100%, so each tab landed a full viewport to the right inside a
+   scrollbar-less overflow-x:auto and all but the first were invisible on a
+   phone. Stacked, every tab stays on screen, matching the desktop sidebar. */
 @media (max-width: 992px) {
   #team-nav {
     display: flex !important;
-    flex-direction: row !important;
-    overflow-x: auto !important;
-    white-space: nowrap !important;
-    gap: 8px !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    overflow-x: visible !important;
+    white-space: normal !important;
+    gap: 4px !important;
     border-left: none !important;
     border-bottom: 1px solid var(--border-hairline) !important;
-    padding-bottom: var(--space-4) !important;
+    padding-bottom: 0 !important;
     margin-bottom: var(--space-6) !important;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
   }
-  #team-nav::-webkit-scrollbar { display: none; }
   #team-nav button {
-    flex-shrink: 0 !important;
-    border-left: none !important;
-    border-bottom: 3px solid transparent !important;
+    flex-shrink: 1 !important;
+    align-self: flex-start !important;
+    width: auto !important;
+    white-space: normal !important;
+    border-left: 3px solid transparent !important;
+    border-bottom: none !important;
     border-radius: 0 !important;
-    padding: 8px 16px !important;
+    padding: 12px 16px 12px 4px !important;
+    min-height: 44px !important;
     font-size: var(--font-size-sm) !important;
   }
   #team-nav button.active,
   #team-nav button[style*="border-blue-900"] {
-    border-bottom-color: var(--nssr-blue) !important;
+    border-left-color: var(--nssr-blue) !important;
+    border-bottom-color: transparent !important;
     background: var(--accent-subtle-bg) !important;
     color: var(--nssr-blue) !important;
   }
@@ -3886,6 +3698,17 @@ html, body { overflow-x: hidden; width: 100%; }
   gap: 16px 12px !important;
 }
 
+/* The auto-fit above packs four impact stats into three ~100px columns on a
+   phone, leaving one orphan on its own row with a mismatched label wrap. Two
+   even columns keep it balanced. Scoped below sm so the desktop auto-fit that
+   the page's `sm:grid-cols-2` utility would otherwise have provided is
+   untouched at 640px and up. */
+@media (max-width: 639.98px) {
+  .editorial-strip__item .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
 /* --- Stanford-Style Borderless Event Cards (Zero-Box) --- */
 .event-card-stanford {
   background: transparent;
@@ -3941,7 +3764,7 @@ html, body { overflow-x: hidden; width: 100%; }
 }
 
 .event-card-stanford__category::after {
-  content: 'Â·';
+  content: '·';
   margin-left: var(--space-3);
   color: #e2e8f0;
 }
@@ -3981,7 +3804,7 @@ html, body { overflow-x: hidden; width: 100%; }
 }
 
 /* ==========================================================================
-   WORKSHOP AGENDA LAYOUT â€” Premium Box-less Horizontal Rows
+   WORKSHOP AGENDA LAYOUT — Premium Box-less Horizontal Rows
    ========================================================================== */
 
 .workshop-agenda {
@@ -4212,7 +4035,7 @@ html, body { overflow-x: hidden; width: 100%; }
 }
 
 /* ==========================================================================
-   MIT / STANFORD ACADEMIC AESTHETIC â€” team.html
+   MIT / STANFORD ACADEMIC AESTHETIC — team.html
    ========================================================================== */
 
  /* --- Team Hero --- */
@@ -4261,30 +4084,35 @@ html, body { overflow-x: hidden; width: 100%; }
    border-left-color: var(--nssr-blue);
  }
 
- @media (max-width: 992px) {
-   .team-sidebar {
-     flex-direction: row;
-     overflow-x: auto;
-     white-space: nowrap;
-     gap: 8px;
-     padding-bottom: 16px;
-     margin-bottom: 32px;
-     border-bottom: 1px solid #e2e8f0;
-     -webkit-overflow-scrolling: touch;
-     scrollbar-width: none;
-   }
-   .team-sidebar::-webkit-scrollbar { display: none; }
-   .team-nav-btn {
-     flex-shrink: 0;
-     padding: 10px 20px;
-     border-left: none;
-     border-bottom: 3px solid transparent;
-     border-radius: 0;
-     white-space: nowrap;
-   }
-   .team-nav-btn:hover { border-bottom-color: #cbd5e1; }
-   .team-nav-btn.active { border-bottom-color: var(--nssr-blue); }
- }
+  @media (max-width: 992px) {
+    /* Kept a vertical list here rather than a horizontal scroller: the tabs are
+       block-level and width:100%, so a row layout pushed every tab a full
+       viewport to the right inside a scrollbar-less overflow-x:auto, hiding all
+       but the first one on phones. */
+    .team-sidebar {
+      flex-direction: column;
+      overflow-x: visible;
+      white-space: normal;
+      gap: 4px;
+      padding-bottom: 0;
+      margin-bottom: 32px;
+      border-bottom: 1px solid #e2e8f0;
+      -webkit-overflow-scrolling: auto;
+    }
+    .team-sidebar::-webkit-scrollbar { display: none; }
+    .team-nav-btn {
+      width: auto;
+      align-self: flex-start;
+      flex-shrink: 1;
+      padding: 12px 16px 12px 4px;
+      border-left: 3px solid transparent;
+      border-bottom: none;
+      border-radius: 0;
+      white-space: normal;
+    }
+    .team-nav-btn:hover { border-left-color: #cbd5e1; border-bottom-color: transparent; }
+    .team-nav-btn.active { border-left-color: var(--nssr-blue); border-bottom-color: transparent; }
+  }
 
 /* --- Team Page Grid (Enforced Horizontal Layout) --- */
   .team-grid {
@@ -4486,7 +4314,7 @@ html, body { overflow-x: hidden; width: 100%; }
   }
 
 /* ==========================================================================
-   EDITORIAL PHOTO ROW â€” Event & Outreach Split Layout
+   EDITORIAL PHOTO ROW — Event & Outreach Split Layout
    ========================================================================== */
 
  .editorial-photo-row {
@@ -4681,7 +4509,7 @@ html, body { overflow-x: hidden; width: 100%; }
   }
 
 /* ==========================================================================
-   PREMIUM CARD GRID â€” Event Archive Horizontal Cards
+   PREMIUM CARD GRID — Event Archive Horizontal Cards
    ========================================================================== */
 
 .premium-card-grid {
@@ -4763,6 +4591,12 @@ html, body { overflow-x: hidden; width: 100%; }
   vertical-align: middle;
 }
 
+/* 0.65rem is 10.4px, below the comfortable floor for a short uppercase status
+   label on a phone. Declared after the base rule so it wins on source order. */
+@media (max-width: 639.98px) {
+  .status-badge { font-size: 0.7rem; }
+}
+
 .status-completed {
   background-color: #f1f5f9;
   color: #64748b;
@@ -4838,7 +4672,7 @@ html, body { overflow-x: hidden; width: 100%; }
 }
 
 /* ==========================================================================
-   CREATIVE PHOTO WALL â€” Masonry Layout
+   CREATIVE PHOTO WALL — Masonry Layout
    ========================================================================== */
 
 .creative-photo-wall {
@@ -4938,10 +4772,10 @@ html, body { overflow-x: hidden; width: 100%; }
 }
 
 /* ==========================================================================
-   RESEARCH SPOTLIGHT â€” Sticky Scroll Creative Section
+   RESEARCH SPOTLIGHT — Sticky Scroll Creative Section
    ========================================================================== */
 
-/* research.html â€” the hero gradient ends on a lighter navy (#172554).
+/* research.html — the hero gradient ends on a lighter navy (#172554).
    Fade the overlay's bottom edge to solid deep navy so the hero closes
    cleanly before the light Research Spotlight section begins. */
 .research-hero-overlay {
@@ -4951,7 +4785,7 @@ html, body { overflow-x: hidden; width: 100%; }
     linear-gradient(135deg, #0f172a, #172554) !important;
 }
 
-/* Light (whitish) section â€” the dark navy field read as "blue/off" here.
+/* Light (whitish) section — the dark navy field read as "blue/off" here.
    Full-bleed slate-50 background, ink text, brand-blue accents. */
 .research-spotlight {
   background-color: #f8fafc !important;
@@ -4960,22 +4794,23 @@ html, body { overflow-x: hidden; width: 100%; }
   overflow: hidden;
 }
 
+/* Outer shell: a single column, with the centred header stacked above the
+   block grid. It still owns the max-width and gutters. */
 .spotlight-grid {
   display: grid;
-  grid-template-columns: 1fr 1.5fr;
-  gap: 80px;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(48px, 6vw, 80px);
   max-width: 1400px;
   margin: 0 auto;
   padding: 0 40px;
   align-items: start;
 }
 
-/* Left Column: Sticky */
-.spotlight-sticky {
-  position: sticky;
-  top: 120px;
-  height: fit-content;
-  padding-top: 40px;
+/* Centred section header. Replaces the old sticky left column. */
+.spotlight-header {
+  max-width: 760px;
+  margin: 0 auto;
+  text-align: center;
 }
 
 .spotlight-eyebrow {
@@ -5009,32 +4844,49 @@ html, body { overflow-x: hidden; width: 100%; }
   font-size: 1.125rem;
   line-height: 1.7;
   color: rgba(255, 255, 255, 0.6);
-  max-width: 28ch;
+  max-width: 52ch;
+  margin: 0 auto;
 }
 
-/* Right Column: Scrolling Content */
+/* The five blocks in a two-column grid: three on the first two rows, the
+   fifth alone on the last row. */
 .spotlight-content {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
+  --col-pad: clamp(24px, 3vw, 40px);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  /* Zero column gap on purpose: the gutter is drawn as block padding instead,
+     so the hairline between two cells meets in the middle. With a real column
+     gap each cell's rule stops short and the row divider looks broken. */
+  column-gap: 0;
+  row-gap: clamp(40px, 4vw, 56px);
+  align-items: start;
 }
 
 .spotlight-block {
   display: grid;
-  grid-template-columns: 280px 1fr;
-  gap: 32px;
-  padding: 40px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  grid-template-columns: minmax(0, 220px) minmax(0, 1fr);
+  gap: 24px;
+  align-items: center;
+  padding: clamp(32px, 3vw, 40px) var(--col-pad);
+  /* A rule above each row reads correctly in a grid; a rule below each cell
+     would stop short at every column edge. */
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
   transition: none;
 }
 
-.spotlight-block:first-child {
-  padding-top: 0;
+/* Flush the outer edges so the row divider spans the full width. */
+.spotlight-content > .spotlight-block:nth-child(odd) {
+  padding-left: 0;
 }
 
-.spotlight-block:last-child {
-  border-bottom: none;
-  padding-bottom: 0;
+.spotlight-content > .spotlight-block:nth-child(even) {
+  padding-right: 0;
+}
+
+/* The first row sits flush under the header, with no rule above it. */
+.spotlight-content > .spotlight-block:nth-child(-n + 2) {
+  padding-top: 0;
+  border-top: 0;
 }
 
 .spotlight-block__media {
@@ -5133,7 +4985,7 @@ html, body { overflow-x: hidden; width: 100%; }
 .research-spotlight .spotlight-lead { color: rgba(15, 23, 42, 0.7); }
 
 .research-spotlight .spotlight-block {
-  border-bottom-color: rgba(15, 23, 42, 0.12);
+  border-top-color: rgba(15, 23, 42, 0.12);
 }
 
 .research-spotlight .spotlight-block__tag { color: #1d4ed8; }
@@ -5155,26 +5007,47 @@ html, body { overflow-x: hidden; width: 100%; }
     gap: 60px;
     padding: 0 24px;
   }
-  
-  .spotlight-sticky {
-    position: static;
-    padding-top: 0;
+
+  /* The block grid collapses to a single column here too. */
+  .spotlight-content {
+    grid-template-columns: minmax(0, 1fr);
+    column-gap: 0;
+    row-gap: clamp(40px, 4vw, 56px);
   }
-  
+
+  /* One column has no gutter to inset, so drop the edge padding. */
+  .spotlight-content > .spotlight-block:nth-child(odd),
+  .spotlight-content > .spotlight-block:nth-child(even) {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  /* In one column only the very first block sits flush against the header,
+     so only it has its rule suppressed (not the first two, as on desktop). */
+  .spotlight-content > .spotlight-block:nth-child(-n + 2) {
+    padding-top: clamp(32px, 3vw, 40px);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .spotlight-content > .spotlight-block:first-child {
+    padding-top: 0;
+    border-top: 0;
+  }
+
   .spotlight-block {
     grid-template-columns: 1fr;
     gap: 20px;
   }
-  
+
   .spotlight-block__media {
     aspect-ratio: 16 / 9;
     max-width: 100%;
   }
-  
+
   .spotlight-block__body {
     padding-left: 0;
   }
-  
+
   .spotlight-block:hover .spotlight-block__body {
     transform: translateX(0);
   }
@@ -5195,13 +5068,13 @@ html, body { overflow-x: hidden; width: 100%; }
  }
 
 /* ==========================================================================
-   RESEARCH PAGE â€” premium section containers
+   RESEARCH PAGE — premium section containers
    ---------------------------------------------------------------------------
    Locks both stacked blocks on research.html to a full premium width so they
    can never collapse into a narrow centered column:
-     1. .research-spotlight      â€” the dark "Research Spotlight" block
+     1. .research-spotlight      — the dark "Research Spotlight" block
         (background stays full-bleed; only the inner grid is constrained)
-     2. .research-pathways-wrapper â€” the white Research Pathways / Fellowship
+     2. .research-pathways-wrapper — the white Research Pathways / Fellowship
         block below it (<main> on research.html)
    Widths are enforced with !important so any later or competing rule can only
    be overridden by a higher-specificity !important of its own.
@@ -5250,10 +5123,10 @@ html, body { overflow-x: hidden; width: 100%; }
 }
 
 /* ==========================================================================
-   EDITORIAL FEATURE â€” "Asymmetric Editorial Feature" (LaTeX workshop)
+   EDITORIAL FEATURE — "Asymmetric Editorial Feature" (LaTeX workshop)
    ---------------------------------------------------------------------------
    Left: eyebrow + serif display heading + lede + rule.
-   Right: asymmetric photo grid â€” one tall plate spanning both rows, two
+   Right: asymmetric photo grid — one tall plate spanning both rows, two
    smaller plates stacked beside it. Pure layout, no card chrome; the
    imagery carries the section.
    ========================================================================== */
@@ -5409,7 +5282,7 @@ html, body { overflow-x: hidden; width: 100%; }
    Left column reuses the editorial type stack (.feature-meta / .feature-title
    / .feature-desc) plus theme chips and a rule link. Right column reuses the
    strict .feature-photo-grid from the editorial feature (one large plate
-   spanning both rows, stacked secondaries) â€” no absolute positioning, so the
+   spanning both rows, stacked secondaries) — no absolute positioning, so the
    plates can never overlap.
    ========================================================================== */
 .workshop-showcase {
@@ -5477,7 +5350,13 @@ html, body { overflow-x: hidden; width: 100%; }
 
 .showcase-link:hover::after { width: 44px; }
 
-/* Strict 3-piece asymmetric grid â€” large spans both rows on the left, two
+/* Touch target: the rendered box was only 21px tall, well under the 44px a
+   thumb needs. Height only, so the laptop row is unaffected. */
+@media (max-width: 1023.98px) {
+  .showcase-link { min-height: 44px; }
+}
+
+/* Strict 3-piece asymmetric grid — large spans both rows on the left, two
    smalls stack on the right. Sharp edges: no radius, no border. */
 .workshop-showcase .feature-photo-grid {
   display: grid !important;
@@ -5614,7 +5493,7 @@ html, body { overflow-x: hidden; width: 100%; }
 }
 
 /* ==========================================================================
-   GALLERY LIGHTBOX â€” Image Clarity Overrides
+   GALLERY LIGHTBOX — Image Clarity Overrides
    ---------------------------------------------------------------------------
    Scoped to #gallery-lightbox on purpose: the bare id `lightbox-img` is also
    used by event.html, outreach.html, student-empowerment.html and
@@ -5640,7 +5519,7 @@ html, body { overflow-x: hidden; width: 100%; }
 }
 
 /* ==========================================================================
-   Team Page â€” Tab Visibility Lock
+   Team Page — Tab Visibility Lock
    ---------------------------------------------------------------------------
    Ownership: .team-tab-content controls visibility; the inner .team-grid
    controls layout. These MUST stay separate elements, otherwise
@@ -5706,6 +5585,27 @@ html, body { overflow-x: hidden; width: 100%; }
     line-height: 1.3;
     color: var(--nssr-dark);
     margin: 0 0 12px 0;
+  }
+
+  /* Below the 1024px breakpoint the ABOUT NSSR split stacks into one column,
+     so the desktop display sizes would leave an unreadably long measure in a
+     narrow track. Capped here; the values above are untouched at 1024px and up,
+     which keeps the laptop layout exactly as it was. The breakpoint mirrors
+     Tailwind's max-lg (1023.98px) so the two never overlap. These classes are
+     used only by the ABOUT NSSR section. */
+  @media (max-width: 1023.98px) {
+    .heading-2xl {
+      font-size: clamp(1.875rem, 8vw, 2.5rem);
+    }
+
+    .lede-copy {
+      font-size: 1rem;
+      margin-bottom: 32px;
+    }
+
+    .mission-vision-title {
+      font-size: 1.25rem;
+    }
   }
 }
 

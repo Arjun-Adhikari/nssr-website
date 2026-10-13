@@ -72,12 +72,10 @@ export default function RootLayout({
       className={`${sourceSans.variable} ${sourceSerif.variable} ${oswald.variable} h-full antialiased`}
     >
       <head>
-        {/* Self-hosted through next/font; the CDN <link> the static site used
-            for Font Awesome is kept so the icon glyphs stay identical. */}
-        <link
-          rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-        />
+        {/* The site now loads no third-party CSS at runtime: the three text
+            faces come from next/font and Font Awesome is installed as a
+            dependency. The JSON-LD block is the organisation schema the
+            original site declared inline on every page. */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}

@@ -18,7 +18,7 @@ export default function BlogIndexPage() {
         <div className="container mx-auto px-6">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
             <div className="max-w-3xl">
-              <span className="font-oswald text-blue-600 uppercase tracking-[0.4em] text-[10px] md:text-xs font-bold mb-4 block">
+              <span className="font-oswald text-blue-600 uppercase tracking-[0.4em] text-[10px] max-md:text-[11px] md:text-xs font-bold mb-4 block">
                 NSSR Thought Leadership
               </span>
               <h1 className="text-4xl md:text-8xl font-bold text-slate-900 leading-tight">
@@ -26,7 +26,7 @@ export default function BlogIndexPage() {
               </h1>
             </div>
             <div className="text-left md:text-right border-l md:border-l-0 pl-4 md:pl-0">
-              <p className="font-oswald text-[10px] uppercase tracking-widest text-slate-400">
+              <p className="font-oswald text-[10px] max-lg:text-[11px] uppercase tracking-widest text-slate-400">
                 Scientific Journal
               </p>
               <p className="text-xs text-gray-500 italic">
@@ -62,7 +62,7 @@ export default function BlogIndexPage() {
                       />
                     </div>
                     <div className="w-full md:w-2/3">
-                      <span className="text-[10px] font-oswald font-bold text-blue-600 tracking-widest uppercase mb-2 block">
+                      <span className="text-[10px] max-lg:text-[11px] font-oswald font-bold text-blue-600 tracking-widest uppercase mb-2 block">
                         {post.category} {"//"} {post.date}
                       </span>
                       <h2 className="text-2xl font-bold mb-3 group-hover:text-blue-900 transition leading-tight">
@@ -80,14 +80,14 @@ export default function BlogIndexPage() {
             {/* Sidebar (Hidden on Mobile) */}
             <aside className="lg:col-span-4 hidden lg:block border-l pl-10">
               <div className="sticky top-32">
-                <h4 className="font-oswald text-[10px] font-bold uppercase tracking-widest mb-8 border-b pb-4 text-slate-500">
+                <h4 className="font-oswald text-[10px] max-lg:text-[11px] font-bold uppercase tracking-widest mb-8 border-b pb-4 text-slate-500">
                   Editor&apos;s Choice
                 </h4>
                 <div className="space-y-10">
                   {posts.map((post) => (
                     <div className="cursor-pointer group" key={post.slug}>
                       <Link href={`/blog/${post.slug}`}>
-                        <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">
+                        <span className="text-[9px] max-lg:text-[11px] font-bold text-gray-400 uppercase tracking-widest">
                           {post.date}
                         </span>
                         <h5 className="font-bold text-sm group-hover:text-blue-600 transition mt-1 leading-snug">

@@ -93,7 +93,7 @@ export function TeamTabs() {
                 className="btn-primary btn-sharp inline-flex"
               >
                 Be a College Representative
-                <i className="fa-solid fa-arrow-up-right-from-square ml-2" />
+                <i className="fa-solid fa-external-link ml-2" />
               </a>
             </div>
           )}

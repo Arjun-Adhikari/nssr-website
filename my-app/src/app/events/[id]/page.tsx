@@ -45,18 +45,22 @@ export default async function EventDetailPage({
               <span className="font-oswald text-blue-600 font-bold tracking-[0.2em] uppercase text-xs">
                 {event.categoryType} {"//"} {event.category}
               </span>
-              <h2 className="text-3xl md:text-5xl font-bold mt-4 mb-8 text-slate-900 leading-tight">
+              {/* The original used an <h2> here, which left the detail view with
+                  no <h1> at all. Promoting it keeps the exact same rendering —
+                  main.css styles h1 and h2 through one shared rule and the
+                  utility classes win either way. */}
+              <h1 className="text-3xl md:text-5xl font-bold mt-4 mb-8 text-slate-900 leading-tight">
                 {event.title}
-              </h2>
+              </h1>
               <div
                 className="prose prose-slate max-w-none text-slate-600 text-sm md:text-base leading-relaxed"
                 dangerouslySetInnerHTML={{ __html: event.body }}
               />
 
               <div className="mt-16 pt-12 border-t">
-                <h3 className="font-oswald text-lg md:text-xl font-bold uppercase tracking-widest mb-8">
+                <h2 className="font-oswald text-lg md:text-xl font-bold uppercase tracking-widest mb-8">
                   Session Gallery
-                </h3>
+                </h2>
                 <SessionGallery images={event.gallery} />
               </div>
             </article>

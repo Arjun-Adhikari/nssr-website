@@ -38,14 +38,14 @@ export default async function BlogPostPage({
             <div className="reading-container">
               <Link
                 href="/blog"
-                className="mb-10 flex items-center text-[10px] font-oswald font-bold uppercase tracking-widest text-blue-600 transition-all hover:gap-2 w-fit"
+                className="mb-10 flex items-center text-[10px] max-lg:text-[11px] font-oswald font-bold uppercase tracking-widest text-blue-600 transition-all hover:gap-2 w-fit max-lg:min-h-11"
               >
                 <i className="fa-solid fa-arrow-left mr-2" />
                 Back to Dispatch
               </Link>
 
               <header className="mb-12">
-                <span className="font-oswald text-blue-600 font-bold tracking-[0.3em] uppercase text-[10px] mb-6 block">
+                <span className="font-oswald text-blue-600 font-bold tracking-[0.3em] uppercase text-[10px] max-lg:text-[11px] mb-6 block">
                   {post.category}
                 </span>
                 <h1 className="text-3xl md:text-5xl font-bold text-slate-900 mb-8 leading-tight">
@@ -77,7 +77,7 @@ export default async function BlogPostPage({
                   <h4 className="font-bold text-slate-900 text-sm">
                     {post.author}
                   </h4>
-                  <p className="text-[10px] text-gray-400 font-oswald uppercase tracking-widest">
+                  <p className="text-[10px] max-lg:text-[11px] text-gray-400 font-oswald uppercase tracking-widest">
                     {post.role}
                   </p>
                 </div>

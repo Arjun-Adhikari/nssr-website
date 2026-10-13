@@ -1,4 +1,4 @@
-import type { NavItem, SocialLink } from "./types";
+import type { NavItem } from "./types";
 
 /**
  * Routes are absolute-from-root ("/team") rather than the original
@@ -37,24 +37,6 @@ export const footerLinks: NavItem[] = [
   { label: "Events Directory", href: "/events" },
   { label: "Our Team", href: "/team" },
   { label: "Membership", href: "/membership" },
-];
-
-export const socialLinks: SocialLink[] = [
-  {
-    label: "Facebook",
-    href: "https://www.facebook.com/nssrnepal",
-    icon: "fa-facebook-square",
-  },
-  {
-    label: "Instagram",
-    href: "https://www.instagram.com/nssrnepal/",
-    icon: "fa-instagram-square",
-  },
-  {
-    label: "LinkedIn",
-    href: "https://www.linkedin.com/company/nssrnepal/?viewAsMember=true",
-    icon: "fa-linkedin",
-  },
 ];
 
 export const site = {

@@ -106,7 +106,7 @@ function Featured({ event }: { event: NssrEvent }) {
         >
           <Link
             href={`/events/${event.slug}`}
-            className="btn-primary btn-sm inline-flex"
+            className="btn-primary btn-sm inline-flex max-lg:min-h-11 max-lg:items-center"
           >
             View Event Details
           </Link>
@@ -115,7 +115,7 @@ function Featured({ event }: { event: NssrEvent }) {
               href={`/${event.report}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-secondary btn-sm inline-flex"
+              className="btn-secondary btn-sm inline-flex max-lg:min-h-11 max-lg:items-center"
             >
               Download Proceeding
             </a>
@@ -126,29 +126,34 @@ function Featured({ event }: { event: NssrEvent }) {
   );
 }
 
+/** Featured / upcoming event highlight, rendered above the partners strip. */
+export function FeaturedEvent() {
+  const featured = eventsInFeedOrder()[0];
+
+  return (
+    <section
+      className="pb-6 md:pb-10 bg-slate-50 border-b border-slate-100"
+      aria-labelledby="featured-heading"
+    >
+      <div className="container mx-auto px-6">
+        <h2 id="featured-heading" className="sr-only">
+          Featured event
+        </h2>
+        <div id="featured-slot">{featured && <Featured event={featured} />}</div>
+      </div>
+    </section>
+  );
+}
+
 export function EventsArchive() {
   const [activeTab, setActiveTab] = useState(TABS[0].id);
 
-  const ordered = eventsInFeedOrder();
-  const featured = ordered[0];
-
   return (
     <>
-      {/* 2. FEATURED / UPCOMING EVENT HIGHLIGHT */}
+      {/* 3. MAIN HUB (CATEGORIZED) — a <section>, not a <main>: the page owns
+          the single main landmark, and nesting a second one announced two
+          "main" landmarks to screen readers. */}
       <section
-        className="pb-6 md:pb-10 bg-slate-50 border-b border-slate-100"
-        aria-labelledby="featured-heading"
-      >
-        <div className="container mx-auto px-6">
-          <h2 id="featured-heading" className="sr-only">
-            Featured event
-          </h2>
-          <div id="featured-slot">{featured && <Featured event={featured} />}</div>
-        </div>
-      </section>
-
-      {/* 3. MAIN HUB (CATEGORIZED) */}
-      <main
         className="py-12 md:py-20 border-t border-slate-100"
         id="main-archive"
       >
@@ -227,7 +232,7 @@ export function EventsArchive() {
             })}
           </div>
         </div>
-      </main>
+      </section>
     </>
   );
 }

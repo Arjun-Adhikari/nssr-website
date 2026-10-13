@@ -10,12 +10,6 @@ export type NavItem = {
   children?: NavChild[];
 };
 
-export type SocialLink = {
-  label: string;
-  href: string;
-  icon: string;
-};
-
 export type EventStatus = "Completed" | "Complete" | "Upcoming";
 
 export type EventFeed = {

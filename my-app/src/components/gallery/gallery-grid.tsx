@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type SyntheticEvent } from "react";
 import { galleryImages } from "@/lib/gallery";
 
 /**
@@ -10,6 +10,24 @@ import { galleryImages } from "@/lib/gallery";
  */
 export function GalleryGrid() {
   const [open, setOpen] = useState<{ src: string; alt: string } | null>(null);
+
+  /* globals.css keeps `.masonry-item img[loading="lazy"]` at opacity 0 until the
+     `loaded` class lands. gallery.html did this with an inline
+     onload="this.classList.add('loaded')"; without it every photo renders as an
+     empty placeholder box. */
+  const revealImage = (event: SyntheticEvent<HTMLImageElement>) => {
+    event.currentTarget.classList.add("loaded");
+  };
+
+  /* Cached images can finish before React attaches onLoad, which would then
+     never fire and strand the photo at opacity 0. */
+  useEffect(() => {
+    document
+      .querySelectorAll<HTMLImageElement>('.masonry-item img[loading="lazy"]')
+      .forEach((image) => {
+        if (image.complete) image.classList.add("loaded");
+      });
+  }, []);
 
   useEffect(() => {
     if (!open) return;
@@ -36,7 +54,12 @@ export function GalleryGrid() {
             aria-label={image.alt}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={image.src} alt={image.alt} loading="lazy" />
+            <img
+              src={image.src}
+              alt={image.alt}
+              loading="lazy"
+              onLoad={revealImage}
+            />
           </button>
         ))}
       </div>

@@ -145,7 +145,30 @@ const steps = [
   },
 ];
 
-const matrix: { feature: string; cells: { text: string; className: string }[] }[] = [
+type MatrixCell = { text: string; className: string };
+
+const MATRIX_TRACKS = [
+  "Volunteer",
+  "College Representative",
+  "General Member",
+  "Executive / Sub-Exec",
+];
+
+/* Both the table and the stacked mobile cards render a cell through this, so the
+   check-icon treatment can never drift between the two layouts. */
+function renderCell(cell: MatrixCell) {
+  if (cell.className.includes("font-bold")) {
+    return (
+      <>
+        <i className="fa-solid fa-check mr-1" />
+        {cell.text}
+      </>
+    );
+  }
+  return cell.text;
+}
+
+const matrix: { feature: string; cells: MatrixCell[] }[] = [
   {
     feature: "Annual Fee",
     cells: [
@@ -200,7 +223,7 @@ export default function MembershipPage() {
       <header className="hero-clear pb-16 md:pb-24 bg-slate-900 text-white relative overflow-hidden">
         <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
         <div className="container mx-auto px-6 relative z-10 text-center">
-          <span className="font-oswald text-blue-400 uppercase tracking-widest text-[10px] md:text-xs font-bold mb-4 block">
+            <span className="font-oswald text-blue-400 uppercase tracking-widest text-[10px] max-md:text-[11px] md:text-xs font-bold mb-4 block">
             Governance &amp; Engagement Framework
           </span>
           <h1 className="text-3xl md:text-6xl font-bold mb-6">
@@ -236,7 +259,7 @@ export default function MembershipPage() {
             {tracks.map((track) => (
               <div
                 key={track.title}
-                className={`pathway-card p-6 rounded-2xl flex flex-col justify-between ${
+                className={`p-6 rounded-2xl flex flex-col justify-between ${
                   track.dark
                     ? "bg-slate-900 text-white shadow-xl"
                     : "bg-white"
@@ -396,19 +419,16 @@ export default function MembershipPage() {
             <div className="w-16 h-1 bg-blue-600 mx-auto mt-4" />
           </div>
 
-          <div className="overflow-x-auto">
+          <div className="hidden sm:block overflow-x-auto">
             <table className="w-full text-left text-xs border-collapse border border-slate-200">
               <thead>
                 <tr className="bg-slate-900 text-white font-oswald uppercase tracking-wider">
                   <th className="p-4 border border-slate-700">Feature / Rights</th>
-                  <th className="p-4 border border-slate-700">Volunteer</th>
-                  <th className="p-4 border border-slate-700">
-                    College Representative
-                  </th>
-                  <th className="p-4 border border-slate-700">General Member</th>
-                  <th className="p-4 border border-slate-700">
-                    Executive / Sub-Exec
-                  </th>
+                  {MATRIX_TRACKS.map((track) => (
+                    <th className="p-4 border border-slate-700" key={track}>
+                      {track}
+                    </th>
+                  ))}
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-200 text-gray-700">
@@ -422,20 +442,46 @@ export default function MembershipPage() {
                         className={`p-4 border border-slate-200 ${cell.className}`}
                         key={cell.text}
                       >
-                        {cell.className.includes("font-bold") ? (
-                          <>
-                            <i className="fa-solid fa-check mr-1" />
-                            {cell.text}
-                          </>
-                        ) : (
-                          cell.text
-                        )}
+                        {renderCell(cell)}
                       </td>
                     ))}
                   </tr>
                 ))}
               </tbody>
             </table>
+          </div>
+
+          {/* Below sm the five-column matrix is 497px wide inside a ~334px
+              viewport, so the last track was simply cut off. Each feature is
+              rendered as its own labelled block instead. */}
+          <div className="sm:hidden space-y-4">
+            {matrix.map((row) => (
+              <div
+                key={row.feature}
+                className="border border-slate-200 rounded-lg overflow-hidden"
+              >
+                <h3 className="p-3 bg-slate-900 text-white font-oswald uppercase tracking-wider text-xs">
+                  {row.feature}
+                </h3>
+                <dl className="divide-y divide-slate-100">
+                  {row.cells.map((cell, index) => (
+                    <div
+                      key={cell.text}
+                      className="flex items-start justify-between gap-4 p-3"
+                    >
+                      <dt className="text-xs font-bold text-slate-900 w-2/5 shrink-0">
+                        {MATRIX_TRACKS[index]}
+                      </dt>
+                      <dd
+                        className={`text-xs text-right ${cell.className}`}
+                      >
+                        {renderCell(cell)}
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+              </div>
+            ))}
           </div>
           <p className="text-[11px] text-gray-400 italic mt-3">
             * College Representatives and Volunteers hold observer status unless

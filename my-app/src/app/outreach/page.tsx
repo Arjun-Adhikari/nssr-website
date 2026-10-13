@@ -65,7 +65,7 @@ export default function OutreachPage() {
               </p>
               <Link
                 href="/science-beyond-classroom"
-                className="font-oswald text-xs uppercase tracking-widest text-blue-700 inline-flex items-center gap-1"
+                className="font-oswald text-xs uppercase tracking-widest text-blue-700 inline-flex items-center gap-1 max-lg:min-h-11"
               >
                 Explore the Initiative <i className="fa-solid fa-arrow-right" />
               </Link>
@@ -83,7 +83,7 @@ export default function OutreachPage() {
               </p>
               <Link
                 href="/student-empowerment"
-                className="font-oswald text-xs uppercase tracking-widest text-blue-700 inline-flex items-center gap-1"
+                className="font-oswald text-xs uppercase tracking-widest text-blue-700 inline-flex items-center gap-1 max-lg:min-h-11"
               >
                 Explore the Initiative <i className="fa-solid fa-arrow-right" />
               </Link>
